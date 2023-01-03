@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "stdio.h": "c",
+        "get_next_line.h": "c",
+        "limits.h": "c"
+    }
+}
