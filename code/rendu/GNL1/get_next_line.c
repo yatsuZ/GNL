@@ -95,19 +95,27 @@ static char	*get_line(int fd, char *ligne)
 	while (nbr_read != 0 && bool)
 	{
 		nbr_read = read(fd, buff, BUFFER_SIZE);
+		
 		if (!buff)
 			return (free(ligne), NULL);
+		
 		buff[BUFFER_SIZE] = '\0';
+		
 		if (nbr_read < 0 || (!nbr_read && !ligne[0]))
 			return (free(ligne), free(buff), NULL);
+
 		if (nbr_read == 0)
 			break;
+		
 		tmp = ft_strjoin(ligne, buff);
 		free(ligne);
+		
 		if (!tmp)
 			return (free(buff), NULL);
+		
 		ligne = ft_strdup(tmp);
 		free(tmp);
+		
 		if (find_endl(buff) != -1)
 			bool = FALSE;
 	}

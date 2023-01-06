@@ -34,6 +34,7 @@ int main(void)
         else
             printf("ligne %i = |%s", i++, ligne_fd);
         free(ligne_fd);
+        // i = 0;
         if (!ligne_fd)
             i = 0;
     }
