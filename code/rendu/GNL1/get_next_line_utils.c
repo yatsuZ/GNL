@@ -29,7 +29,7 @@ size_t	ft_strlen(const char *cha)
 	size_t	i;
 
 	i = 0;
-	while (cha[i] != '\0')
+	while (cha && cha[i] != '\0')
 		i++;
 	return (i);
 }

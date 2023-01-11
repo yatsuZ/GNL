@@ -28,11 +28,11 @@ int main(void)
     {
         ligne_fd = get_next_line(fd);
         if (i < 10)
-            printf("ligne %i   = |%s", i++, ligne_fd);
+            printf("ligne %i   = |%s\n", i++, ligne_fd);
         else if (i < 100)
-            printf("ligne %i  = |%s", i++, ligne_fd);
+            printf("ligne %i  = |%s\n", i++, ligne_fd);
         else
-            printf("ligne %i = |%s", i++, ligne_fd);
+            printf("ligne %i = |%s\n", i++, ligne_fd);
         free(ligne_fd);
         // i = 0;
         if (!ligne_fd)

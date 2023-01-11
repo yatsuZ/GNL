@@ -6,21 +6,26 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:06:34 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/11 19:49:59 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/01/11 21:45:07 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *s)
+//si option != 0 il cherchera endl
+size_t	ft_strlen_or_findendl(char *s, int option)
 {
-	int	i;
+	size_t	i;
 
 	if (!s)
 		return (0);
 	i = 0;
 	while (s[i])
+	{
+		if (option && s[i] == '\n')
+			return (i);
 		i++;
+	}
 	return (i);
 }
 
@@ -51,7 +56,7 @@ static char	*ft_strdup(char *s, int option)
 	char	*ptr;
 	size_t	i;
 
-	ptr = ft_calloc((ft_strlen(s) + 1), sizeof(char));
+	ptr = ft_calloc((ft_strlen_or_findendl(s, 0) + 1), sizeof(char));
 	if (!ptr)
 		return (NULL);
 	i = 0;
@@ -66,25 +71,30 @@ static char	*ft_strdup(char *s, int option)
 	return (ptr);
 }
 
+//je free s2 lors de lallocation
 char	*ft_strjoin(char *s1, char *s2)
 {
-	int		i;
-	int		j;
-
-	char	*s;
+	size_t		i;
+	size_t		j;
+	char		*s;
 
 	if (!s1 && !s2)
 		return (NULL);
 	else if (!s1)
-		return (ft_strdup(s2));
+		return (ft_strdup(s2, 1));
 	else if (!s2)
-		return (ft_strdup(s1));
-	i = -1;
-	j = -1;
-	s = ft_calloc(ft_strlen(s1) + ft_strlen(s2) + 1, sizeof(char));
-	while (++i < ft_strlen(s1))
+		return (ft_strdup(s1, 1));
+	s = ft_calloc(ft_strlen_or_findendl(s1, 0) + \
+	ft_strlen_or_findendl(s2, 0) + 1, sizeof(char));
+	while (i < ft_strlen_or_findendl(s1, 0))
+	{
 		s[i] = s1[i];
-	while (++j < ft_strlen(s2))
+		i++;
+	}
+	while (j < ft_strlen_or_findendl(s2, 0))
+	{
 		s[j + i] = s2[j];
+		j++;
+	}
 	return (free(s1), free(s2), s);
 }

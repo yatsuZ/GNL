@@ -115,7 +115,8 @@ static char	*get_line(int fd, char *ligne)
 		
 		ligne = ft_strdup(tmp);
 		free(tmp);
-		
+		if (!ligne)
+			return (NULL);
 		if (find_endl(buff) != -1)
 			bool = FALSE;
 	}
