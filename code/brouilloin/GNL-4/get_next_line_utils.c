@@ -6,7 +6,7 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:06:34 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/11 21:45:07 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/01/12 19:36:44 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static char	*ft_strdup(char *s, int option)
 	char	*ptr;
 	size_t	i;
 
+	if (!s)
+		return (NULL);
 	ptr = ft_calloc((ft_strlen_or_findendl(s, 0) + 1), sizeof(char));
 	if (!ptr)
 		return (NULL);
@@ -86,6 +88,8 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s1, 1));
 	s = ft_calloc(ft_strlen_or_findendl(s1, 0) + \
 	ft_strlen_or_findendl(s2, 0) + 1, sizeof(char));
+	i = 0;
+	j = 0;
 	while (i < ft_strlen_or_findendl(s1, 0))
 	{
 		s[i] = s1[i];
@@ -97,4 +101,23 @@ char	*ft_strjoin(char *s1, char *s2)
 		j++;
 	}
 	return (free(s1), free(s2), s);
+}
+#include <stdio.h>
+
+int	fusion(char **s1, char *s2)
+{
+	char	*tmp;
+	int		boolean;
+	
+	boolean = 0;
+	if (!s2)
+		return (1);
+	tmp = ft_strdup((*s1), 1);
+	printf("i_endl = %lu et len = %lu\n\n",ft_strlen_or_findendl(s2, 1), ft_strlen_or_findendl(s2, 2));
+	if (!tmp)
+		return (1);
+	if (ft_strlen_or_findendl(s2, 1) == ft_strlen_or_findendl(s2, 2))
+		boolean = 1;
+	(*s1) = ft_strjoin(tmp, s2);
+	return (boolean);
 }

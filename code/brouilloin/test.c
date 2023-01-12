@@ -92,6 +92,81 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (free(s1), free(s2), s);
 }
 
+char	*ft_strcutendl(char *str, char **after, size_t i, size_t i_endl)
+{
+	char	*before;
+
+    before = ft_calloc((i_endl + 2), sizeof(char));
+    (*after) = ft_calloc((ft_strlen_or_findendl(str, 0)) - i_endl + 1, sizeof(char));
+    while (str[i])
+    {
+        if (i <= i_endl)
+            before[i] = str[i];
+        else if (i > i_endl)
+            (*after)[i - i_endl - 1] = str[i];
+        i++;
+    }
+	before[i_endl + 1] = '\0';
+    (*after)[i - i_endl - 1] = '\0';
+    return (before);
+}
+
+int main()
+{
+    char *before;
+    char *after = NULL;
+    char *str;
+	size_t	i_endl;
+
+    str  = "01234\n\n";
+    printf("str = %s\nafter = %s\n", str, after);
+	i_endl = ft_strlen_or_findendl(str, 1);
+	if (!str[i_endl])
+		before = str;
+	else
+    	before = ft_strcutendl(str, &after, 0, i_endl);
+    printf("\nstr = %s\nbefore = %s\nafter = %s\n", str, before, after);
+	if (after)
+    	free(after);
+	if (before != str)
+    	free(before);
+    return (0);
+}
+
+/*
+option qui done before ou affter :
+
+char	*ft_strcutendl(char *str, size_t i, int option)
+{
+	char	*after;
+	char	*before;
+	size_t	i_endl;
+
+	i_endl = ft_strlen_or_findendl(str, 1);
+    if (!str[i_endl])
+        return (str);
+    before = calloc((i_endl + 2), sizeof(char));
+	after = calloc(((ft_strlen_or_findendl(str, 0)) - i_endl ), sizeof(char));//la
+    while (str[i])
+    {
+        if (i <= i_endl)
+            before[i] = str[i];
+        else
+		{
+            after[i - i_endl - 1] = str[i];
+			printf("i - i_endl = %lu\n", i - i_endl - 1);
+			// printf("after = %s\n", after);
+		}
+        i++;
+    }
+	before[i_endl + 1] = '\0';
+    after[i - i_endl - 1] = '\0';
+	if (!option)
+		return (free(after), before);
+    return (free(before), after);
+}
+
+ancience version :
 char	*ft_strcutendl(char *str, char *after, size_t i)
 {
 	char	*before;
@@ -101,7 +176,7 @@ char	*ft_strcutendl(char *str, char *after, size_t i)
     if (!str[i_endl])
         return (str);
     before = ft_calloc((i_endl + 2), sizeof(char));
-    after = ft_calloc((ft_strlen_or_findendl(str, 0)) - i_endl + 1, sizeof(char));
+    after = ft_calloc((ft_strlen_or_findendl(str, 0)) - i_endl, sizeof(char));
     while (str[i])
     {
         if (i < i_endl)
@@ -116,20 +191,6 @@ char	*ft_strcutendl(char *str, char *after, size_t i)
         i++;
     }
     after[i - i_endl] = '\0';
-    return (before);
+    return (free(str), before);
 }
-
-int main()
-{
-    char *res;
-    char *after = NULL;
-    char *str;
-
-    str  = "01234\n6789.";
-    printf("after = %s\nstr = %s\n|FIN", after, str);
-    res = ft_strcutendl(str, after, 0);
-    printf("\nafter = %s\nstr = %s\nres = %s|FIN", after, str, res);
-    free(after);
-    free(res);
-    return (0);
-}
+*/
