@@ -6,14 +6,14 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 18:52:01 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/13 18:31:01 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/01/19 13:58:31 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char	*ft_strcutendl(char *str, char **after, size_t i, size_t i_endl)//valide pas derreur de memoir
+char	*ft_strcutendl(char *str, char **after, size_t i, size_t i_endl)
 {
 	char	*before;
 
@@ -41,6 +41,7 @@ char    *get_line(int fd, char *reste)
     char    *all_read;
     char    *buff;
     char    *tmp;
+    int     i_endl;
     int     nbr_read;
 
     all_read = NULL;
@@ -48,40 +49,40 @@ char    *get_line(int fd, char *reste)
     free(reste);
     buff = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
     nbr_read = BUFFER_SIZE;
-    while (nbr_read == BUFFER_SIZE && ft_strlen_or_findendl(all_read, 0) == ft_strlen_or_findendl(all_read, 1))
+    i_endl = ft_strlen_or_findendl(buff, 1);
+    while (nbr_read == BUFFER_SIZE && !buff[i_endl])
     {
         nbr_read = read(fd, buff, BUFFER_SIZE);
-        if (nbr_read == 0)
+        if (nbr_read <= 0)
             break;
+        buff[nbr_read] = '\0';
         tmp = ft_strdup(all_read, 1);
         all_read = ft_strjoin(tmp, buff);
         if (!all_read)
-        {
-            //printf("all_read = %s c NULL\n", all_read);
             return (free(buff),NULL);
-        }
+        i_endl = ft_strlen_or_findendl(buff, 1);
     }
     return (free(buff),all_read);    
 }
 
-//je veux ligne retourne le ligne actuelle avec un \n
 char	*get_next_line(int fd)
 {
-    static char *reste_fd;// -> le reste di buffer size apres avoir read un \n
-    char        *lecture_buffer;// tout ce que le buffer a lu
-    char        *ligne;//-> la ligne que je doit retourner
-    size_t      i_endl;// index du permier \n ou sinon la longuer de la string
+    static char *reste_fd;
+    char        *lecture_buffer;
+    char        *ligne;
+    size_t      i_endl;
     
     if (BUFFER_SIZE <= 0 || fd < 0 || fd >= FOPEN_MAX)
         return (NULL);
-    lecture_buffer = get_line(fd, reste_fd);//retourne tout ce que jai pu lire tant que je ne suis pas arrive a la fin et que je nai pas vu de endl
+    if (!reste_fd)
+        reste_fd = NULL;
+    lecture_buffer = get_line(fd, reste_fd);
     reste_fd = NULL;
-    //printf("lecture buff = %s\n", lecture_buffer);
 	if (!lecture_buffer)
 		return (NULL);
 	i_endl = ft_strlen_or_findendl(lecture_buffer, 1);
-    if (!lecture_buffer[i_endl])
+    if (!lecture_buffer[i_endl] || !lecture_buffer[i_endl + 1])
         return (lecture_buffer);
-    ligne = ft_strcutendl(lecture_buffer, &reste_fd, 0, i_endl);// cut si il y a des charactere apres le premier endl que nous voyons
+    ligne = ft_strcutendl(lecture_buffer, &reste_fd, 0, i_endl);
     return (free(lecture_buffer), ligne);
 }

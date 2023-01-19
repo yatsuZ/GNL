@@ -6,24 +6,26 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:06:34 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/13 18:23:23 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/01/19 14:25:08 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//si option != 0 il cherchera endl
 size_t	ft_strlen_or_findendl(char *s, int option)
 {
 	size_t	i;
+	char	*s_ptr;
 
 	if (!s)
 		return (0);
+	s_ptr = s;
 	i = 0;
-	while (s[i])
+	while (*s_ptr)
 	{
-		if (option && s[i] == '\n')
+		if (option && *s_ptr == '\n')
 			return (i);
+		s_ptr++;
 		i++;
 	}
 	return (i);
@@ -47,7 +49,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		return (NULL);
 	cast = (unsigned char *)pt;
 	while (totalsize--)
-		cast[totalsize] = 0;
+		*(cast++) = 0;
 	return (pt);
 }
 
@@ -73,12 +75,12 @@ char	*ft_strdup(char *s, int option)
 	return (ptr);
 }
 
-//je free s2 lors de lallocation
 char	*ft_strjoin(char *s1, char *s2)
 {
-	size_t		i;
-	size_t		j;
 	char		*s;
+	char		*s_ptr;
+	char		*s1_ptr;
+	char		*s2_ptr;
 
 	if (!s1 && !s2)
 		return (NULL);
@@ -88,17 +90,21 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s2, 0));
 	s = ft_calloc(ft_strlen_or_findendl(s1, 0) + \
 	ft_strlen_or_findendl(s2, 0) + 1, sizeof(char));
-	i = 0;
-	j = 0;
-	while (i < ft_strlen_or_findendl(s1, 0))
+	s_ptr = s;
+	s1_ptr = s1;
+	s2_ptr = s2;
+	while (*s1_ptr)
 	{
-		s[i] = s1[i];
-		i++;
+		*s_ptr = *s1_ptr;
+		s_ptr++;
+		s1_ptr++;
 	}
-	while (j < ft_strlen_or_findendl(s2, 0))
+	while (*s2_ptr)
 	{
-		s[j + i] = s2[j];
-		j++;
+		*s_ptr = *s2_ptr;
+		s_ptr++;
+		s2_ptr++;
 	}
 	return (free(s1), s);
 }
+
