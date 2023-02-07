@@ -6,16 +6,17 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/05 16:06:34 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/19 14:25:08 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/02/06 19:08:42 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-size_t	ft_strlen_or_findendl(char *s, int option)
+int	ft_strlen_or_findendl(char *s, int option)
 {
-	size_t	i;
-	char	*s_ptr;
+	register int	i;
+	char			*s_ptr;
 
 	if (!s)
 		return (0);
@@ -23,18 +24,32 @@ size_t	ft_strlen_or_findendl(char *s, int option)
 	i = 0;
 	while (*s_ptr)
 	{
-		if (option && *s_ptr == '\n')
-			return (i);
+		if (*s_ptr == '\n')
+		{
+			if (option == 1)
+				return (i);
+			else if (option == 2)
+				return (1);
+			else if (option == 3)
+			{
+				s_ptr++;
+				return (*s_ptr == '\0');
+			}
+		}
 		s_ptr++;
 		i++;
 	}
+	if (option == 2)
+		return (0);
+	else if (option == 3)
+		return (1);
 	return (i);
 }
 
-void	*ft_calloc(size_t nmemb, size_t size)
+void	*ft_calloc(int nmemb, int size)
 {
 	void			*pt;
-	size_t			totalsize;
+	int				totalsize;
 	unsigned char	*cast;
 
 	if (!nmemb && !size)
@@ -44,7 +59,7 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	totalsize = size * nmemb;
 	if (totalsize / size != nmemb)
 		return (NULL);
-	pt = malloc(totalsize);
+	pt = malloc((size_t)totalsize);
 	if (!pt)
 		return (NULL);
 	cast = (unsigned char *)pt;
@@ -52,24 +67,21 @@ void	*ft_calloc(size_t nmemb, size_t size)
 		*(cast++) = 0;
 	return (pt);
 }
-
 char	*ft_strdup(char *s, int option)
 {
 	char	*ptr;
-	size_t	i;
+	char	*ptr_ptr;
+	char	*s_ptr;
 
 	if (!s)
 		return (NULL);
 	ptr = ft_calloc((ft_strlen_or_findendl(s, 0) + 1), sizeof(char));
 	if (!ptr)
 		return (NULL);
-	i = 0;
-	while (s[i])
-	{
-		ptr[i] = s[i];
-		i++;
-	}
-	ptr[i] = 0;
+	ptr_ptr = ptr;
+	s_ptr = s;
+	while (*s_ptr)
+		*(ptr_ptr++) = *(s_ptr++);
 	if (option)
 		return (free(s), ptr);
 	return (ptr);
@@ -88,23 +100,44 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (s1);
 	else if (!s1)
 		return (ft_strdup(s2, 0));
+		
 	s = ft_calloc(ft_strlen_or_findendl(s1, 0) + \
 	ft_strlen_or_findendl(s2, 0) + 1, sizeof(char));
+	
 	s_ptr = s;
 	s1_ptr = s1;
 	s2_ptr = s2;
+	
 	while (*s1_ptr)
-	{
-		*s_ptr = *s1_ptr;
-		s_ptr++;
-		s1_ptr++;
-	}
+		*(s_ptr++) = *(s1_ptr++);
 	while (*s2_ptr)
-	{
-		*s_ptr = *s2_ptr;
-		s_ptr++;
-		s2_ptr++;
-	}
+		*(s_ptr++) = *(s2_ptr++);
 	return (free(s1), s);
 }
 
+
+char	*ft_memcpy(char *dest, char *src, int n)
+{
+    register int    i;
+
+    i = 0;
+    if (!dest || !src)
+        return (dest);
+    while (i < n)
+    {
+        if ((n - i) >= 8)
+        {
+            ((long long *)dest)[i / 8] = ((long long *)src)[i / 8];
+            i += 7;
+        }
+        else if ((n - i) >= 4)
+        {
+            ((int *)dest)[i / 4] = ((int *)src)[i / 4];
+            i += 3;
+        }
+        else
+            dest[i] = src[i];
+        i++;
+    }
+    return (dest);
+}

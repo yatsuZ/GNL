@@ -6,13 +6,12 @@
 /*   By: yzaoui <yzaoui@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/27 18:58:12 by yzaoui            #+#    #+#             */
-/*   Updated: 2023/01/19 13:47:23 by yzaoui           ###   ########.fr       */
+/*   Updated: 2023/02/06 11:41:16 by yzaoui           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
-#include <string.h>
 #include <time.h>
 
 int	main(void)
@@ -24,7 +23,7 @@ int	main(void)
 	time_t start, end;
 	time(&start);
 //////////////////// code à chronométrer
-	fichier_txt = "./fichiertxt/big_line.txt";
+	fichier_txt = "./fichiertxt/multiple_nlx5.txt";
 	fd = open(fichier_txt, O_RDONLY);
 	i = 1;
 	printf("fd = %d\n", fd);
